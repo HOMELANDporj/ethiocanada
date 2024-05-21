@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { auth, db } from '../firebaseConfig';
 import { setDoc, doc } from 'firebase/firestore';
 import { useLanguage } from '../LanguageContext';
-import styles from './SignInStyles';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './SignInStyles.js';
 
 const SignUp = () => {
   const [firstName, setFirstName] = useState('');
@@ -12,9 +13,9 @@ const SignUp = () => {
   const [middleName, setMiddleName] = useState('');
   const [age, setAge] = useState('');
   const [sex, setSex] = useState('');
-  const [passportURL, setPassportURL] = useState(''); // Store URL of uploaded passport image
-  const [idPicURL, setIdPicURL] = useState(''); // Store URL of uploaded ID picture image
-  const [pictureURL, setPictureURL] = useState(''); // Store URL of uploaded picture image
+  const [passport, setPassport] = useState(null);
+  const [idPic, setIdPic] = useState(null);
+  const [picture, setPicture] = useState(null);
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
   const { language, toggleLanguage } = useLanguage();
@@ -32,12 +33,13 @@ const SignUp = () => {
         middleName,
         age,
         sex,
-        passportURL,
-        idPicURL,
-        pictureURL,
+        passportURL: passport ? URL.createObjectURL(passport) : '', // Temporary URL for demo purposes
+        idPicURL: idPic ? URL.createObjectURL(idPic) : '', // Temporary URL for demo purposes
+        pictureURL: picture ? URL.createObjectURL(picture) : '', // Temporary URL for demo purposes
         phoneNumber,
         email,
         uid: user.uid,
+        role: 'user', // Default role is user
         verified: false
       });
       alert('Registration successful!');
@@ -48,138 +50,113 @@ const SignUp = () => {
     }
   };
 
-  // Function to handle file upload for passport image
-  const handlePassportUpload = (e) => {
-    const file = e.target.files[0];
-    // Implement file upload logic here, such as using Firebase Storage
-    // Once the upload is complete, set the URL to the uploaded image
-    // Example: setPassportURL(url);
-  };
-
-  // Function to handle file upload for ID picture image
-  const handleIdPicUpload = (e) => {
-    const file = e.target.files[0];
-    // Implement file upload logic here, such as using Firebase Storage
-    // Once the upload is complete, set the URL to the uploaded image
-    // Example: setIdPicURL(url);
-  };
-
-  // Function to handle file upload for picture image
-  const handlePictureUpload = (e) => {
-    const file = e.target.files[0];
-    // Implement file upload logic here, such as using Firebase Storage
-    // Once the upload is complete, set the URL to the uploaded image
-    // Example: setPictureURL(url);
-  };
-
   return (
-    <div style={styles.container}>
-      <div style={styles.formContainer}>
-        <h3 className="text-center mb-4">{language === 'english' ? 'Sign Up' : 'ይመዝገቡ'}</h3>
-        <form onSubmit={handleSignUp}>
-          <div style={styles.formGroup}>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="First Name"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-              required
-            />
-          </div>
-          <div style={styles.formGroup}>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Last Name"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-              required
-            />
-          </div>
-          <div style={styles.formGroup}>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Middle Name"
-              value={middleName}
-              onChange={(e) => setMiddleName(e.target.value)}
-              required
-            />
-          </div>
-          <div style={styles.formGroup}>
-            <input
-              type="number"
-              className="form-control"
-              placeholder="Age"
-              value={age}
-              onChange={(e) => setAge(e.target.value)}
-              required
-            />
-          </div>
-          <div style={styles.formGroup}>
+    <div className="container">
+      <h3 className="text-center mb-4" style={{ color: 'red' }}>{language === 'english' ? 'Sign Up' : 'ይመዝገቡ'}</h3>
+      <form onSubmit={handleSignUp}>
+        <div className="form-group">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="First Name"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Last Name"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Middle Name"
+            value={middleName}
+            onChange={(e) => setMiddleName(e.target.value)}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <input
+            type="number"
+            className="form-control"
+            placeholder="Age"
+            value={age}
+            onChange={(e) => setAge(e.target.value)}
+            required
+          />
+        </div>
+        <div className="form-group">
           <select
-              className="form-select"
-              value={sex}
-              onChange={(e) => setSex(e.target.value)}
-              required
-            >
-              <option value="Male">{language === 'english' ? 'Male' : 'ወንድ'}</option>
-              <option value="Female">{language === 'english' ? 'Female' : 'ሴት'}</option>
-            </select>
-          </div>
-          <div style={styles.formGroup}>
-            <input
-              type="file"
-              className="form-control-file"
-              onChange={handlePassportUpload}
-              required
-            />
-          </div>
-          <div style={styles.formGroup}>
-            <input
-              type="file"
-              className="form-control-file"
-              onChange={handleIdPicUpload}
-              required
-            />
-          </div>
-          <div style={styles.formGroup}>
-            <input
-              type="file"
-              className="form-control-file"
-              onChange={handlePictureUpload}
-              required
-            />
-          </div>
-          <div style={styles.formGroup}>
-            <input
-              type="tel"
-              className="form-control"
-              placeholder="Phone Number"
-              value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
-              required
-            />
-          </div>
-          <div style={styles.formGroup}>
-            <input
-              type="password"
-              className="form-control"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-          <button type="submit" className="btn btn-primary btn-block" style={styles.button}>
-            {language === 'english' ? 'Sign Up' : 'ይመዝገቡ'}
-          </button>
-        </form>
-      </div>
-      <div style={styles.languageSwitchContainer}>
-        <button className="btn btn-danger" onClick={toggleLanguage} style={styles.languageSwitchButton}>
-          {language === 'amharic' ? 'Switch to English' : 'ወደ አማርኛ መተየቢያ ቀይር'}
+            className="form-control"
+            value={sex}
+            onChange={(e) => setSex(e.target.value)}
+            required
+          >
+            <option value="">Select Sex</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+          </select>
+        </div>
+        <div className="form-group">
+          <input
+            type="file"
+            className="form-control-file"
+            onChange={(e) => setPassport(e.target.files[0])}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <input
+            type="file"
+            className="form-control-file"
+            onChange={(e) => setIdPic(e.target.files[0])}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <input
+            type="file"
+            className="form-control-file"
+            onChange={(e) => setPicture(e.target.files[0])}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <input
+            type="tel"
+            className="form-control"
+            placeholder="Phone Number"
+            value={phoneNumber}
+            onChange={(e) => setPhoneNumber(e.target.value)}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <input
+            type="password"
+            className="form-control"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
+        <button type="submit" className="btn btn-danger btn-block">
+          {language === 'english' ? 'Sign Up' : 'ይመዝገቡ'}
+        </button>
+      </form>
+      <div className="text-center mt-4">
+        <button className="btn btn-danger" onClick={toggleLanguage}>
+          {language === 'amharic' ? 'Switch to English' : 'ወደ አማርኛ ቋንቋ ቀይር'}
         </button>
       </div>
     </div>

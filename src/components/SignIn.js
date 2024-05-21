@@ -1,79 +1,77 @@
-// SignIn.js
-
 import React, { useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import { auth } from '../firebaseConfig';
-import styles from './SignInStyles';
+import { auth, db } from '../firebaseConfig';
+import { doc, getDoc } from 'firebase/firestore';
 import { useLanguage } from '../LanguageContext';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './SignInStyles.js';
 
 const SignIn = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const { language, toggleLanguage, switcherButtonStyle } = useLanguage();
+  const { language, toggleLanguage } = useLanguage();
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleSignIn = async (e) => {
     e.preventDefault();
     try {
-      const email = phoneNumber + '@gmail.com';
-      await signInWithEmailAndPassword(auth, email, password);
-      navigate('/profile');
+      const email = `${phoneNumber}@gmail.com`;
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      const userDoc = await getDoc(doc(db, 'users', user.uid));
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        if (email === 'admin@gmail.com') {
+          navigate('/welcome-admin');
+        } else {
+          navigate('/welcome-user');
+        }
+      } else {
+        console.error('No such document!');
+        setError('No such document!');
+      }
     } catch (error) {
-      setError(error.message);
+      console.error('Error signing in:', error.message);
+      setError('Error signing in. Please try again.');
     }
   };
 
   return (
-    <div style={styles.container}>
-      <div style={styles.formContainer}>
-        <h2 className="text-center mb-4" style={styles.largeRedText}>
-          {language === 'english' ? 'Welcome to Ethio Canada Portal' : 'እንኳን ወደ ኢትዮ ካናዳ መመዝገቢያ ፖርታል በደህና መጡ'}
-        </h2>
-        <h3 className="text-center mb-4">{language === 'english' ? 'Sign In' : 'መግቢያ'}</h3>
-        {error && <p style={styles.textDanger}>{error}</p>}
-        <form onSubmit={handleSubmit}>
-          <div style={styles.formGroup}>
-            <input
-              type="tel"
-              className="form-control"
-              placeholder={language === 'english' ? 'Enter phone number' : 'ስልኩን ያስገቡ'}
-              value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
-              required
-              style={styles.input}
-            />
-          </div>
-          <div style={styles.formGroup}>
-            <input
-              type="password"
-              className="form-control"
-              placeholder={language === 'english' ? 'Enter password' : 'የይለፍ ቃል ያስገቡ'}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              style={styles.input}
-            />
-          </div>
-          <button type="submit" className="btn btn-primary btn-block" style={styles.button}>
-            {language === 'english' ? 'Sign In' : 'ግባ'}
-          </button>
-        </form>
-        <p className="mt-3 text-center">
-          {language === 'english' ? "Don't have an account? " : "ካልተመዘገቡ እባኮት 'እዚህ' ይጫኑ "}
-          <a href="https://t.me/Sami_Eagle" target="_blank" rel="noopener noreferrer">
-            {language === 'english' ? 'Click here' : 'እዚህ'}
-          </a>
-        </p>
-      </div>
-      <div style={{ position: 'fixed', bottom: '20px', right: '20px' }}>
-        <button
-          className="btn"
-          style={{ backgroundColor: 'red', color: 'white' }}
-          onClick={toggleLanguage}
-        >
-          {language === 'english' ? 'Switch to Amharic' : 'Switch to English'}
+    <div className="container">
+      <h1 className="text-center mb-4" style={{ color: 'red' }}>Welcome to Ethio Canada Portal</h1>
+      {error && <p className="text-danger">{error}</p>}
+      <form onSubmit={handleSignIn}>
+        <div className="form-group">
+          <label htmlFor="phone" style={{ color: 'red' }}>{language === 'english' ? 'Phone Number' : 'ስልክ ቁጥር'}</label>
+          <input
+            type="tel"
+            className="form-control"
+            id="phone"
+            value={phoneNumber}
+            onChange={(e) => setPhoneNumber(e.target.value)}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="password" style={{ color: 'red' }}>{language === 'english' ? 'Password' : 'የማለፊያ ቃል'}</label>
+          <input
+            type="password"
+            className="form-control"
+            id="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
+        <button type="submit" className="btn btn-danger btn-block">
+          {language === 'english' ? 'Sign In' : 'ግባ'}
+        </button>
+      </form>
+      <div className="text-center mt-4">
+        <button className="btn btn-danger" onClick={toggleLanguage}>
+          {language === 'amharic' ? 'Switch to English' : 'ወደ አማርኛ ቋንቋ ቀይር'}
         </button>
       </div>
     </div>
