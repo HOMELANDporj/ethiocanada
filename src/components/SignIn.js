@@ -25,8 +25,10 @@ const SignIn = () => {
         const userData = userDoc.data();
         if (email === 'admin@gmail.com') {
           navigate('/welcome-admin');
-        } else {
+        } else if (userData.receiptStatus === 'approved') {
           navigate('/welcome-user');
+        } else {
+          navigate('/upload-receipt');
         }
       } else {
         console.error('No such document!');
@@ -55,7 +57,7 @@ const SignIn = () => {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="password" style={{ color: 'red' }}>{language === 'english' ? 'Password' : 'የማለፊያ ቃል'}</label>
+          <label htmlFor="password" style={{ color: 'red' }}>{language === 'english' ? 'Password' : 'የይለፍ ቃል'}</label>
           <input
             type="password"
             className="form-control"
