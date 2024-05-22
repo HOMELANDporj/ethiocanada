@@ -5,6 +5,7 @@ import SignUp from './components/SignUp';
 import ReceiptUpload from './components/ReceiptUpload';
 import AdminPage from './components/AdminPage';
 import MainPage from './components/MainPage';  // Import MainPage
+import WaitingForApproval from './components/WaitingForApproval'; // Import WaitingForApproval
 import { useAuth } from './AuthContext';
 
 const App = () => {
@@ -18,19 +19,27 @@ const App = () => {
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
         {currentUser ? (
-          <>
-            {userRole === 'admin' ? (
+          userRole === 'admin' ? (
+            <>
               <Route path="/admin" element={<AdminPage />} />
-            ) : (
-              <>
-                {currentUser.receiptStatus === 'approved' ? (
+              <Route path="*" element={<Navigate to="/admin" />} />
+            </>
+          ) : (
+            <>
+              {currentUser.receiptStatus === 'approved' ? (
+                <>
                   <Route path="/" element={<MainPage />} />
-                ) : (
+                  <Route path="*" element={<Navigate to="/" />} />
+                </>
+              ) : (
+                <>
                   <Route path="/upload-receipt" element={<ReceiptUpload />} />
-                )}
-              </>
-            )}
-          </>
+                  <Route path="/waiting-for-approval" element={<WaitingForApproval />} />
+                  <Route path="*" element={<Navigate to="/waiting-for-approval" />} />
+                </>
+              )}
+            </>
+          )
         ) : (
           <Route path="*" element={<Navigate to="/signin" />} />
         )}

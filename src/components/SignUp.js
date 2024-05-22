@@ -29,8 +29,9 @@ const SignUp = () => {
       const user = userCredential.user;
       await setDoc(doc(db, 'users', user.uid), {
         firstName,
-        lastName,
         middleName,
+        lastName,
+        displayName: firstName + ' ' + middleName, 
         age,
         sex,
         passportURL: passport ? URL.createObjectURL(passport) : '', // Temporary URL for demo purposes
@@ -40,7 +41,9 @@ const SignUp = () => {
         email,
         uid: user.uid,
         role: 'user', // Default role is user
-        verified: false
+        verified: false,
+        hasPendingReceipts:false
+
       });
       alert('Registration successful!');
       navigate('/signin');
