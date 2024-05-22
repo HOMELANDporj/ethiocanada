@@ -53,9 +53,10 @@ const SignUp = () => {
   return (
     <div className="container">
       <h3 className="text-center mb-4" style={{ color: 'red' }}>{language === 'english' ? 'Sign Up' : 'ይመዝገቡ'}</h3>
-      <form onSubmit={handleSignUp}>
+      <form onSubmit={handleSignUp}  style={{ color: 'red' }}>
         <div className="form-group">
           <input
+          
             type="text"
             className="form-control"
             placeholder="First Name"

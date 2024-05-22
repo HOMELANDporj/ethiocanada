@@ -1,50 +1,53 @@
 import React, { useState } from 'react';
-import { db, storage } from '../firebaseConfig';
-import { addDoc, collection } from 'firebase/firestore';
+import { storage, db } from '../firebaseConfig';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { useNavigate } from 'react-router-dom';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { useAuth } from '../AuthContext';
 
 const ReceiptUpload = () => {
-  const [receipt, setReceipt] = useState(null);
+  const [file, setFile] = useState(null);
   const { currentUser } = useAuth();
-  const navigate = useNavigate();
 
-  const handleReceiptUpload = async (e) => {
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+  };
+
+  const handleUpload = async (e) => {
     e.preventDefault();
-    if (!receipt) {
-      alert('Please select a receipt to upload');
+    if (!currentUser) {
+      alert('You must be logged in to upload a receipt.');
       return;
     }
 
-    const receiptRef = ref(storage, `receipts/${currentUser.uid}/${receipt.name}`);
+    if (!file) {
+      alert('Please select a file first.');
+      return;
+    }
+
+    const storageRef = ref(storage, `receipts/${currentUser.uid}/${file.name}`);
+
     try {
-      await uploadBytes(receiptRef, receipt);
-      const receiptURL = await getDownloadURL(receiptRef);
+      await uploadBytes(storageRef, file);
+      const downloadURL = await getDownloadURL(storageRef);
 
       await addDoc(collection(db, 'receipts'), {
         userId: currentUser.uid,
-        receiptURL,
-        status: 'pending',
-        timestamp: new Date()
+        receiptURL: downloadURL,
+        timestamp: serverTimestamp(),
+        status: 'pending'
       });
 
-      alert('Receipt uploaded successfully. Waiting for admin approval.');
-      navigate('/'); // Redirect to a suitable page after upload
+      alert('Receipt uploaded successfully!');
     } catch (error) {
-      console.error('Error uploading receipt:', error.message);
+      console.error('Error uploading receipt:', error);
       alert('Error uploading receipt. Please try again.');
     }
   };
 
-  const handleFileChange = (e) => {
-    setReceipt(e.target.files[0]);
-  };
-
   return (
     <div>
-      <h3>Upload Payment Receipt</h3>
-      <form onSubmit={handleReceiptUpload}>
+      <h2>Upload Receipt</h2>
+      <form onSubmit={handleUpload}>
         <input type="file" onChange={handleFileChange} required />
         <button type="submit">Upload</button>
       </form>
