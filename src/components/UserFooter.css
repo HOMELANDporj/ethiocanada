@@ -1,33 +1,63 @@
 /* src/components/UserFooter.css */
+
 .footer {
-        border-top: 1px solid #ddd;
-        box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
-        background-color: #f8f9fa !important;
-      }
-      
-      .footer h5 {
-        color: #ff0000;
-        font-weight: bold;
-      }
-      
-      .footer p {
-        color: #333;
-      }
-      
-      .footer .text-dark {
-        color: #ff0000 !important;
-        text-decoration: none;
-      }
-      
-      .footer .text-dark:hover {
-        text-decoration: underline;
-      }
-      
-      .footer .p-3 {
-        color: #fff;
-      }
-      
-      .footer .container {
-        max-width: 1000px;
-      }
-      
+  border-top: 1px solid #ddd;
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #f8f9fa !important;
+  margin-top: auto; /* Ensure footer sticks to the bottom */
+}
+
+.footer h5 {
+  color: #ff0000;
+  font-weight: bold;
+}
+
+.footer p {
+  color: #f00909;
+}
+
+.footer .text-dark {
+  color: #ff0000 !important;
+  text-decoration: none;
+}
+
+.footer .text-dark:hover {
+  text-decoration: underline;
+}
+
+.footer .p-3 {
+  color: #fff;
+  background-color: #f31212; /* Change background color for copyright section */
+}
+
+.footer .container {
+  max-width: 1000px;
+  display: flex;
+  justify-content: space-between; /* Distribute items along the main axis */
+  align-items: center; /* Center items along the cross axis */
+}
+
+/* Adjustments for Contact section */
+.footer ul {
+  display: flex;
+  list-style: none;
+  padding: 0;
+}
+
+.footer ul li {
+  margin-right: 20px; /* Add space between list items */
+}
+
+.footer ul li i {
+  margin-right: 5px;
+  color: #ff0000;
+}
+
+.footer ul li a {
+  color: #ff0000;
+  text-decoration: none;
+}
+
+.footer ul li a:hover {
+  text-decoration: underline;
+}

@@ -2,16 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { db } from '../firebaseConfig';
 import { collection, query, where, getDocs, getDoc, updateDoc, doc } from 'firebase/firestore';
 import { useAuth } from '../AuthContext';
+import { auth } from '../firebaseConfig';
+import { useNavigate } from 'react-router-dom';
 
 const AdminPage = () => {
   const [pendingReceipts, setPendingReceipts] = useState([]);
+  const [loading, setLoading] = useState(true); // Add loading state
   const { currentUser } = useAuth();
-
+  const navigate = useNavigate();
   const fetchSenderDisplayName = async (userId) => {
     try {
-      const userDoc = doc(db, 'users', userId);
-      const userSnap = await getDoc(userDoc);
-      return userSnap.exists() ? userSnap.data().displayName : 'Unknown Sender';
+      const userDoc = await getDoc(doc(db, 'users', userId)); // Await here
+      return userDoc.exists() ? userDoc.data().displayName : 'Unknown Sender';
     } catch (error) {
       console.error('Error fetching sender display name:', error);
       return 'Unknown Sender';
@@ -33,6 +35,8 @@ const AdminPage = () => {
       } catch (error) {
         console.error('Error fetching pending receipts:', error);
         setPendingReceipts([]);
+      } finally {
+        setLoading(false); // Update loading state after fetching completes
       }
     };
 
@@ -51,6 +55,17 @@ const AdminPage = () => {
     }
   };
 
+  const handleReject = async (receiptId, userId) => {
+    try {
+      await updateDoc(doc(db, 'receipts', receiptId), { status: 'rejected' });
+      alert('Receipt rejected!');
+      setPendingReceipts(pendingReceipts.filter(receipt => receipt.id !== receiptId));
+    } catch (error) {
+      console.error('Error rejecting receipt:', error);
+      alert('Error rejecting receipt. Please try again.');
+    }
+  };
+
   if (!currentUser) {
     return <div>Loading...</div>;
   }
@@ -59,12 +74,37 @@ const AdminPage = () => {
     return <div>You do not have permission to view this page.</div>;
   }
 
+  const handleLogout = async () => {
+    await auth.signOut();
+    navigate('/signin');
+  };
+
   return (
     <div style={{ textAlign: 'center', marginTop: '20px' }}>
-      <h2 style={{ color: 'red', marginBottom: '20px' }}>Pending Receipts</h2>
-      {pendingReceipts.length === 0 ? (
+      <div>
+      <button onClick={handleLogout} style={{
+         fontSize: '12px',
+          padding: '5px 10px',
+           marginRight: '-680px',
+            marginTop:'-120px', 
+            borderRadius:'50px',
+            backgroundColor:'red',
+            color:'white',
+            borderBlockStyle:"none",
+            borderBlockColor:'red'}}>
+        Sign Out
+      </button>
+        <h2 style={{ color: 'red', marginBottom: '20px' }}>Pending Receipts</h2>
+      </div>
+      {loading ? (
+        <div className="spinner-border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      ) : pendingReceipts.length === 0 ? (
+        
         <p>No pending receipts.</p>
       ) : (
+      
         <table style={{ margin: 'auto', borderCollapse: 'collapse', width: '80%' }}>
           <thead>
             <tr>
@@ -79,19 +119,23 @@ const AdminPage = () => {
                 <td style={{ padding: '10px', textAlign: 'left' }}><a href={receipt.receiptURL} target="_blank" rel="noopener noreferrer" style={{ color: 'red', textDecoration: 'none' }}>View Receipt</a></td>
                 <td style={{ padding: '10px', color: 'red', textAlign: 'left' }}>{receipt.displayName}</td>
                 <td style={{ padding: '10px', textAlign: 'left' }}>
-                  <button onClick={() => handleConfirm(receipt.id, receipt.userId)} style={{ backgroundColor: 'red', color: 'white', border: 'none', padding: '5px 10px', borderRadius: '5px', cursor: 'pointer' }}>Confirm</button>
+                  <button onClick={() => handleConfirm(receipt.id, receipt.userId)} style={{ backgroundColor: 'green', color: 'white', border: 'none', padding: '5px 10px', borderRadius: '5px', cursor: 'pointer', marginRight: '5px' }}>Confirm</button>
+                  <button onClick={() => handleReject(receipt.id, receipt.userId)} style={{ backgroundColor: 'red', color: 'white', border: 'none', padding: '5px 10px', borderRadius: '5px', cursor: 'pointer' }}>Reject</button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       )}
-      <button style={{ backgroundColor: 'red', color: 'white', border: 'none', padding: '10px 20px', borderRadius: '5px', marginTop: '20px', cursor: 'pointer' }} onClick={() => window.location.href = '/signup'}>Register New User</button>
+      <div>
+        <button style={{ backgroundColor: 'red', color: 'white', border: 'none', padding: '10px 20px', borderRadius: '5px', marginTop: '20px', cursor: 'pointer' }} onClick={() => window.location.href = '/signup'}>Register New User</button>
+      </div>
     </div>
   );
 };
 
 export default AdminPage;
+
 
 // rules_version = '2';
 // service cloud.firestore {

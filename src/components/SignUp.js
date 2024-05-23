@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import { auth, db } from '../firebaseConfig';
+import { auth, db, storage } from '../firebaseConfig'; // Import storage
 import { setDoc, doc } from 'firebase/firestore';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'; // Firebase Storage functions
 import { useLanguage } from '../LanguageContext';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { Spinner } from 'react-bootstrap'; // Import Spinner from react-bootstrap
 import './SignInStyles.js';
 
 const SignUp = () => {
@@ -18,48 +20,67 @@ const SignUp = () => {
   const [picture, setPicture] = useState(null);
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false); // Loading state
   const { language, toggleLanguage } = useLanguage();
   const navigate = useNavigate();
 
   const handleSignUp = async (e) => {
     e.preventDefault();
+    setLoading(true); // Set loading to true when form is submitted
     try {
       const email = `${phoneNumber}@gmail.com`;
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
+
+      // Upload files to Firebase Storage
+      const uploadFile = async (file, path) => {
+        if (!file) return '';
+        const fileRef = ref(storage, path);
+        await uploadBytes(fileRef, file);
+        return await getDownloadURL(fileRef);
+      };
+
+      const passportURL = await uploadFile(passport, `users/${user.uid}/passport`);
+      const idPicURL = await uploadFile(idPic, `users/${user.uid}/idPic`);
+      const pictureURL = await uploadFile(picture, `users/${user.uid}/picture`);
+
+      // Store user data in Firestore
       await setDoc(doc(db, 'users', user.uid), {
         firstName,
         middleName,
         lastName,
-        displayName: firstName + ' ' + middleName, 
+        displayName: `${firstName} ${middleName}`,
         age,
         sex,
-        passportURL: passport ? URL.createObjectURL(passport) : '', // Temporary URL for demo purposes
-        idPicURL: idPic ? URL.createObjectURL(idPic) : '', // Temporary URL for demo purposes
-        pictureURL: picture ? URL.createObjectURL(picture) : '', // Temporary URL for demo purposes
+        passportURL,
+        idPicURL,
+        pictureURL,
         phoneNumber,
         email,
         uid: user.uid,
         role: 'user', // Default role is user
         verified: false,
-        hasPendingReceipts:false
-
+        hasPendingReceipts: false,
       });
+
       alert('Registration successful!');
       navigate('/signin');
     } catch (error) {
       console.error('Error signing up:', error.message);
       alert('Error signing up. Please try again.');
+    } finally {
+      setLoading(false); // Set loading to false after sign-up process is complete
     }
   };
 
   return (
     <div className="container">
-      <h3 className="text-center mb-4" style={{ color: 'red' }}>{language === 'english' ? 'Sign Up' : 'ይመዝገቡ'}</h3>
-      <form onSubmit={handleSignUp}  style={{ color: 'red' }}>
+      <h3 className="text-center mb-4" style={{ color: 'red' }}>
+        {language === 'english' ? 'Sign Up' : 'ይመዝገቡ'}
+      </h3>
+      <form onSubmit={handleSignUp} style={{ color: 'red' }}>
         <div className="form-group">
           <input
-          
             type="text"
             className="form-control"
             placeholder="First Name"
@@ -111,6 +132,7 @@ const SignUp = () => {
           </select>
         </div>
         <div className="form-group">
+          <label>{language === 'english' ? 'Passport' : 'ፓስፖርት'}</label>
           <input
             type="file"
             className="form-control-file"
@@ -119,6 +141,7 @@ const SignUp = () => {
           />
         </div>
         <div className="form-group">
+          <label>{language === 'english' ? 'ID Picture' : 'የመታወቂያ እቃ'}</label>
           <input
             type="file"
             className="form-control-file"
@@ -127,6 +150,7 @@ const SignUp = () => {
           />
         </div>
         <div className="form-group">
+          <label>{language === 'english' ? 'Profile Picture' : 'የግል ፎቶ'}</label>
           <input
             type="file"
             className="form-control-file"
@@ -155,7 +179,7 @@ const SignUp = () => {
           />
         </div>
         <button type="submit" className="btn btn-danger btn-block">
-          {language === 'english' ? 'Sign Up' : 'ይመዝገቡ'}
+          {loading ? <Spinner animation="border" /> : (language === 'english' ? 'Sign Up' : 'ይመዝገቡ')}
         </button>
       </form>
       <div className="text-center mt-4">

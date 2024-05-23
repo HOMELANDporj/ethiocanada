@@ -1,0 +1,39 @@
+/* src/components/ReceiptUpload.css */
+.receipt-upload-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      
+      .receipt-upload-container h2 {
+        color: #ff0000;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      
+      .receipt-upload-container form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .receipt-upload-container input[type="file"] {
+        margin-bottom: 20px;
+      }
+      
+      .receipt-upload-container button {
+        background-color: #ff0000;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      
+      .receipt-upload-container button:hover {
+        background-color: #cc0000;
+      }
+      

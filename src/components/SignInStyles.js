@@ -1,18 +1,24 @@
 // SignInStyles.js
 
 const styles = {
+  /* src/components/UserFooter.css */
+
+  footer: {
+    marginTop: 0,
+  },
   container: {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    height: '100vh',
-    backgroundColor: '#fff', // White background
+    height: '50vh',
+    backgroundColor: '#fff', 
+    marginBottom:'0px',// White background
   },
   formContainer: {
     maxWidth: '400px',
   },
   formGroup: {
-    marginBottom: '1rem',
+    marginBottom: '1.5rem',
   },
   input: {
     width: '100%',
@@ -41,6 +47,7 @@ const styles = {
     borderRadius: '0.25rem',
     transition: 'color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out',
     color: '#fff', // White text color
+    fontWeight: 'bold', // Bold font weight
   },
   buttonHover: {
     color: '#fff',
@@ -61,6 +68,7 @@ const styles = {
     color: '#dc3545', // Red text color
     textAlign: 'center',
     marginBottom: '1rem',
+    fontWeight: 'bold', // Bold font weight
   },
 };
 
