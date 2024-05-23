@@ -36,3 +36,12 @@
     transform: rotate(360deg);
   }
 }
+/* src/App.css */
+.content {
+  min-height: 80vh;
+  padding: 20px;
+}
+
+.footer {
+  margin-top: 20px;
+}

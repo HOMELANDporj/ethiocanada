@@ -42,7 +42,7 @@ const SignIn = () => {
 
   return (
     <div className="container">
-      <h1 className="text-center mb-4" style={{ color: 'red' }}>Welcome to Ethio Canada Portal</h1>
+      {/* <h1 className="text-center mb-4" style={{ color: 'red' }}>Welcome to Ethio Canada Portal</h1> */}
       {error && <p className="text-danger">{error}</p>}
       <form onSubmit={handleSignIn}>
         <div className="form-group">

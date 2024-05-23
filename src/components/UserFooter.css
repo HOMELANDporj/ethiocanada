@@ -1,0 +1,33 @@
+/* src/components/UserFooter.css */
+.footer {
+        border-top: 1px solid #ddd;
+        box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+        background-color: #f8f9fa !important;
+      }
+      
+      .footer h5 {
+        color: #ff0000;
+        font-weight: bold;
+      }
+      
+      .footer p {
+        color: #333;
+      }
+      
+      .footer .text-dark {
+        color: #ff0000 !important;
+        text-decoration: none;
+      }
+      
+      .footer .text-dark:hover {
+        text-decoration: underline;
+      }
+      
+      .footer .p-3 {
+        color: #fff;
+      }
+      
+      .footer .container {
+        max-width: 1000px;
+      }
+      
