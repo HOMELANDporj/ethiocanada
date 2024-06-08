@@ -2,6 +2,13 @@
   text-align: center;
 }
 /* src/App.css */
+/* App.css */
+body {
+  background-image: url('../src/R\ \(4\).jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
 
 .wrapper {
   display: flex;

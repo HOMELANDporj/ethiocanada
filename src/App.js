@@ -28,6 +28,7 @@ const App = () => {
       renderRoutes = (
         <>
           <Route path="/admin" element={<AdminPage />} />
+          <Route path="/signup" element={<SignUp />} />
           <Route path="*" element={<Navigate to="/admin" />} />
         </>
       );
