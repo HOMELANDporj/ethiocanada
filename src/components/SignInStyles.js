@@ -1,74 +1,43 @@
-// SignInStyles.js
-
 const styles = {
-  /* src/components/UserFooter.css */
-
-  footer: {
-    marginTop: 0,
+  largeRedText: {
+    color: 'red',
   },
   container: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '50vh',
-    backgroundColor: '#fff', 
-    marginBottom:'0px',// White background
+    maxWidth: '400px',
+    margin: '0 auto',
+    padding: '20px',
+    backgroundColor: '#fff',
+    borderRadius: '8px',
+    boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
+  },
+  textDanger: {
+    color: '#ff0000',
   },
   formContainer: {
-    maxWidth: '400px',
+    display: 'flex',
+    flexDirection: 'column',
   },
   formGroup: {
-    marginBottom: '1.5rem',
+    marginBottom: '15px',
   },
   input: {
     width: '100%',
-    padding: '0.75rem 1rem',
-    fontSize: '1rem',
-    lineHeight: '1.5',
-    color: '#dc3545', // Red text color
-    backgroundColor: '#fff',
-    backgroundClip: 'padding-box',
+    padding: '10px',
+    borderRadius: '4px',
     border: '1px solid #ced4da',
-    borderRadius: '0.25rem',
-    transition: 'border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out',
   },
   button: {
-    display: 'block',
-    width: '100%',
-    padding: '0.75rem 1rem',
-    fontSize: '1rem',
-    lineHeight: '1.5',
-    textAlign: 'center',
-    whiteSpace: 'nowrap',
-    verticalAlign: 'middle',
-    cursor: 'pointer',
-    backgroundColor: '#dc3545', // Red background
-    border: '1px solid #dc3545', // Red border
-    borderRadius: '0.25rem',
-    transition: 'color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out',
-    color: '#fff', // White text color
-    fontWeight: 'bold', // Bold font weight
-  },
-  buttonHover: {
+    backgroundColor: '#ff0000',
     color: '#fff',
-    backgroundColor: '#0056b3',
-    borderColor: '#0056b3',
+    padding: '10px 20px',
+    border: 'none',
+    borderRadius: '4px',
+    cursor: 'pointer',
   },
-  textCenter: {
-    textAlign: 'center',
-  },
-  textDanger: {
-    color: '#dc3545', // Red text color
-  },
-  marginTop3: {
-    marginTop: '1rem',
-  },
-  largeRedText: {
-    fontSize: '2rem',
-    color: '#dc3545', // Red text color
-    textAlign: 'center',
-    marginBottom: '1rem',
-    fontWeight: 'bold', // Bold font weight
+  signUpLink: {
+    color: '#ff0000',
+    cursor: 'pointer',
+    textDecoration: 'none',
   },
 };
 

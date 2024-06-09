@@ -1,0 +1,39 @@
+/* src/components/MainPage.css */
+
+.main-page-container {
+        padding: 40px;
+        max-width: 800px;
+        margin: 0 auto;
+        color: #333;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      
+      .main-page-container h1 {
+        color: #ff5733;
+        margin-bottom: 20px;
+        font-size: 2.5em;
+      }
+      
+      .main-page-container h2 {
+        color: #cc0000;
+        margin-top: 30px;
+        font-size: 1.8em;
+      }
+      
+      .main-page-container p {
+        font-size: 1.1em;
+        line-height: 1.6;
+        margin-bottom: 20px;
+      }
+      
+      .main-page-container a {
+        color: #007bff;
+        text-decoration: none;
+      }
+      
+      .main-page-container a:hover {
+        text-decoration: underline;
+      }
+      

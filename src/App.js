@@ -10,9 +10,10 @@ import NotValidReceipt from './components/NotValidReceipt ';
 import { useAuth } from './AuthContext';
 import UserNavbar from './components/UserNavbar ';
 import UserFooter from './components/UserFooter ';
-import './App.css';
 import ProfilePage from './components/ProfilePage';
 import AboutUs from './components/AboutUs';
+import PreviewImagesPage from './components/PreviewImagesPage';
+import './App.css';
 
 const App = () => {
   const { currentUser, receiptStatus } = useAuth();
@@ -64,8 +65,9 @@ const App = () => {
         default:
           renderRoutes = (
             <>
+              <Route path="/preview-images" element={<PreviewImagesPage />} />
               <Route path="/upload-receipt" element={<ReceiptUpload />} />
-              <Route path="*" element={<Navigate to="/upload-receipt" />} />
+              <Route path="*" element={<Navigate to="/preview-images" />} />
             </>
           );
           break;

@@ -92,6 +92,12 @@ const SignIn = () => {
             {language === 'amharic' ? 'Switch to English' : 'ወደ አማርኛ ቋንቋ ቀይር'}
           </button>
         </div>
+        <div className="text-center mt-4">
+          <p>{language === 'english' ? "Don't have an account?" : 'መለያ አልሰሩም?'}</p>
+          <button className="btn btn-link" onClick={() => navigate('/signup')} style={styles.signUpLink}>
+            {language === 'english' ? 'Sign up here' : 'እዚህ ይመዝገቡ'}
+          </button>
+        </div>
       </div>
     </div>
   );

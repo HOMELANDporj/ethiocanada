@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
-import { auth, db, storage } from '../firebaseConfig'; // Import storage
+import { auth, db, storage } from '../firebaseConfig';
 import { setDoc, doc } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage'; // Firebase Storage functions
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { useLanguage } from '../LanguageContext';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Spinner } from 'react-bootstrap'; // Import Spinner from react-bootstrap
-import './SignInStyles.js';
+import { Spinner } from 'react-bootstrap';
+import './SignUpStyles.css'; // Import the CSS file for styling
 
 const SignUp = () => {
   const [firstName, setFirstName] = useState('');
@@ -20,19 +20,18 @@ const SignUp = () => {
   const [picture, setPicture] = useState(null);
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false); // Loading state
+  const [loading, setLoading] = useState(false);
   const { language, toggleLanguage } = useLanguage();
   const navigate = useNavigate();
 
   const handleSignUp = async (e) => {
     e.preventDefault();
-    setLoading(true); // Set loading to true when form is submitted
+    setLoading(true);
     try {
       const email = `${phoneNumber}@gmail.com`;
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // Upload files to Firebase Storage
       const uploadFile = async (file, path) => {
         if (!file) return '';
         const fileRef = ref(storage, path);
@@ -44,7 +43,6 @@ const SignUp = () => {
       const idPicURL = await uploadFile(idPic, `users/${user.uid}/idPic`);
       const pictureURL = await uploadFile(picture, `users/${user.uid}/picture`);
 
-      // Store user data in Firestore
       await setDoc(doc(db, 'users', user.uid), {
         firstName,
         middleName,
@@ -58,7 +56,7 @@ const SignUp = () => {
         phoneNumber,
         email,
         uid: user.uid,
-        role: 'user', // Default role is user
+        role: 'user',
         verified: false,
         hasPendingReceipts: false,
       });
@@ -69,16 +67,16 @@ const SignUp = () => {
       console.error('Error signing up:', error.message);
       alert('Error signing up. Please try again.');
     } finally {
-      setLoading(false); // Set loading to false after sign-up process is complete
+      setLoading(false);
     }
   };
 
   return (
-    <div className="container">
-      <h3 className="text-center mb-4" style={{ color: 'red' }}>
+    <div className="signup-container">
+      <h3 className="text-center mb-4">
         {language === 'english' ? 'Sign Up' : 'ይመዝገቡ'}
       </h3>
-      <form onSubmit={handleSignUp} style={{ color: 'red' }}>
+      <form onSubmit={handleSignUp}>
         <div className="form-group">
           <input
             type="text"

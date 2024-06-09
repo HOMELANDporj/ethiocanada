@@ -36,4 +36,58 @@
       .receipt-upload-container button:hover {
         background-color: #cc0000;
       }
+      .receipt-upload-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      
+      .receipt-upload-container h2 {
+        color: #ff0000;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      
+      .fingerprint-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+      
+      .fingerprint-image {
+        width: 100px;
+        height: 100px;
+        cursor: pointer;
+      }
+      
+      .fingerprint-message {
+        color: green;
+        margin-top: 10px;
+      }
+      
+      .form-group {
+        margin-bottom: 15px;
+      }
+      
+      .btn-primary {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 4px;
+        background-color: #ff0000;
+        color: white;
+        cursor: pointer;
+      }
+      
+      .btn-primary:disabled {
+        background-color: #cccccc;
+      }
+      
+      .btn-primary:hover {
+        background-color: #cc0000;
+      }
       

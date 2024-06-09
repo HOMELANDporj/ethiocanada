@@ -1,24 +1,38 @@
 /* src/components/AboutUs.css */
+
 .about-us-container {
-        padding: 40px;
-        max-width: 800px;
-        margin: 0 auto;
-        color: #333;
-      }
-      
-      .about-us-container h1 {
-        color: #ff0000;
-        margin-bottom: 20px;
-      }
-      
-      .about-us-container h2 {
-        color: #cc0000;
-        margin-top: 30px;
-      }
-      
-      .about-us-container p {
-        font-size: 1.1em;
-        line-height: 1.6;
-        margin-bottom: 20px;
-      }
-      
+  padding: 40px;
+  max-width: 800px;
+  margin: 0 auto;
+  color: #333;
+  background-color: #fff; /* Set background color to white */
+  border-radius: 10px; /* Add some border radius for a soft edge */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
+}
+
+.about-us-container h1 {
+  color: #ff5733;
+  margin-bottom: 20px;
+  font-size: 2.5em;
+}
+
+.about-us-container h2 {
+  color: #cc0000;
+  margin-top: 30px;
+  font-size: 1.8em;
+}
+
+.about-us-container p {
+  font-size: 1.1em;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.about-us-container a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.about-us-container a:hover {
+  text-decoration: underline;
+}
