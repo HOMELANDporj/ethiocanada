@@ -3,7 +3,7 @@ import { initializeApp } from 'firebase/app';
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
-import { getAnalytics } from 'firebase/analytics';
+//import { getAnalytics } from 'firebase/analytics';
 console.log("API Key:", process.env.REACT_APP_FIREBASE_API_KEY);
 console.log("Auth Domain:", process.env.REACT_APP_FIREBASE_AUTH_DOMAIN);
 console.log("Project ID:", process.env.REACT_APP_FIREBASE_PROJECT_ID);
