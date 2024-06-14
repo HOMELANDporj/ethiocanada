@@ -11,7 +11,7 @@ const PreviewImagesPage = () => {
 
   return (
     <div className="preview-images-container">
-      <h2>Preview Images</h2>
+    
       <div className="images-wrapper">
         <img src="/images/p.png" alt="document" className="preview-image" />
       </div>

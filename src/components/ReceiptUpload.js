@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { storage, db } from '../firebaseConfig';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { collection, addDoc, serverTimestamp, doc, updateDoc, getDoc } from 'firebase/firestore';
 import { useAuth } from '../AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { useLongPress } from 'react-use';
 import './ReceiptUpload.css';
 import fingerprint from '../images/fingerprint.png';
 import fingerprintAccepted from '../images/fingerprint-accepted.png';
@@ -14,7 +15,7 @@ const ReceiptUpload = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [isFingerprintAccepted, setIsFingerprintAccepted] = useState(false);
-  const [isPressing, setIsPressing] = useState(false);
+  const [fingerprintPressCount, setFingerprintPressCount] = useState(0);
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -76,36 +77,26 @@ const ReceiptUpload = () => {
     }
   };
 
-  const handleMouseDown = () => {
-    setIsPressing(true);
-  };
-
-  const handleMouseUp = () => {
-    setIsPressing(false);
-  };
-
-  useEffect(() => {
-    let timer;
-    if (isPressing) {
-      timer = setTimeout(() => {
+  const longPressEvent = useLongPress(() => {
+    setFingerprintPressCount((prevCount) => {
+      const newCount = prevCount + 1;
+      if (newCount === 3) {
         setIsFingerprintAccepted(true);
         alert('Fingerprint accepted!');
-      }, 4000); // 5 seconds
-    } else {
-      clearTimeout(timer);
-    }
-
-    return () => clearTimeout(timer);
-  }, [isPressing]);
+      }
+      return newCount;
+    });
+  }, {
+    isPreventDefault: true,
+    filterEvents: (event) => event.touches && event.touches.length === 1,
+  });
 
   return (
     <div className="receipt-upload-container">
       <h2>Upload Receipt</h2>
       <div 
         className={`fingerprint-container ${isFingerprintAccepted ? 'accepted' : ''}`}
-        onMouseDown={handleMouseDown}
-        onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseUp}
+        {...longPressEvent}
       >
         <img 
           src={isFingerprintAccepted ? fingerprintAccepted : fingerprint} 
@@ -113,6 +104,8 @@ const ReceiptUpload = () => {
           className="fingerprint-image" 
         />
         {isFingerprintAccepted && <p className="fingerprint-message">Fingerprint accepted!</p>}
+        {!isFingerprintAccepted && <p className="fingerprint-message">Press 3 times to accept fingerprint</p>}
+        <p className="fingerprint-count">Press count: {fingerprintPressCount}</p>
       </div>
       <form onSubmit={handleUpload}>
         <input type="file" onChange={handleFileChange} required />

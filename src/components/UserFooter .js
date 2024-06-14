@@ -18,7 +18,7 @@ const UserFooter = () => {
                 <h5 className="text-uppercase mb-0">Contact</h5>
               </li>
               <li className="d-flex align-items-center ml-md-3">
-                <i className="fas fa-phone-alt mr-2"></i> +1234567890
+                <i className="fas fa-phone-alt mr-2"></i> +251907403837
               </li>
               <li className="d-flex align-items-center ml-md-3 mt-2 mt-md-0">
                 <a href="https://t.me/abelo1666" target="_blank" rel="noopener noreferrer" className="text-dark">
